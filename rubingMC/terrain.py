@@ -91,7 +91,8 @@ class TerrainGenerator:
                 texture=tex,  # 只接受纹理对象或None
                 color=block_color,    # 单独设置颜色
                 position=position,
-                collider='box'
+                collider='box',
+                is_block=True
             )
         except Exception as e:
             logging.error(f"方块创建失败: {position} Material:{material} Error:{str(e)}")

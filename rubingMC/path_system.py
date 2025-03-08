@@ -15,4 +15,8 @@ class PathSystem:
         base_path = os.path.dirname(os.path.abspath(__file__))
         asset_path = os.path.join(base_path, '..', 'assets', *subpaths)
         cls.ensure_dir(os.path.dirname(asset_path))
-        return asset_path
+        return os.path.normpath(os.path.join(base_path, '..', 'assets', *subpaths))
+    @classmethod
+    def get_sound_path(cls, *subpaths: str) -> str:
+        """获取音效路径"""
+        return cls.get_asset_path('sounds', *subpaths)
