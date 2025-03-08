@@ -1,5 +1,7 @@
 import os
 import logging
+import platform
+import psutil
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from rubingMC.path_system import PathSystem
@@ -17,6 +19,27 @@ logging.basicConfig(
 )
 logging.info("=== 如冰制作我的世界DEMO启动中 ===")
 
+# 新增系统信息日志
+try:
+    system_name = platform.system()
+    
+    # 更精确的Windows版本检测
+    if system_name == "Windows":
+        build_number = sys.getwindowsversion().build
+        if build_number >= 22000:  # Windows 11起始构建号
+            os_version = "Windows 11"
+        else:
+            os_version = f"Windows 10 (Build {build_number})"
+    else:
+        os_version = f"{system_name} {platform.release()}"
+
+    mem = psutil.virtual_memory()
+    logging.info(f"操作系统: {os_version}")
+    logging.info(f"内存总量: {mem.total / (1024**3):.2f}GB")
+    logging.info(f"可用内存: {mem.available / (1024**3):.2f}GB")
+except Exception as e:
+    logging.error(f"系统信息获取失败: {str(e)}")
+
 # 获取用户输入
 try:
     MAP_SIZE = int(input("请输入地形尺寸（32-256）: ") or 64)
@@ -26,9 +49,18 @@ except ValueError:
     MAP_SIZE = 64
 
 if __name__ == '__main__':
-    app = Ursina()
+    app = Ursina(development_mode=False)
     window.title = f"分层地形生成 - {MAP_SIZE}x{MAP_SIZE}"
     window.size = (1600, 900)
+    
+    # 添加窗口位置设置
+    window.position = (100, 100)  # 设置初始位置
+    window.borderless = False
+    window.fps_counter.enabled = True
+    window.cog_button.enabled = False
+    
+    # 添加垂直同步设置提升稳定性
+    window.vsync = True
     
     try:
         generator = TerrainGenerator(MAP_SIZE)

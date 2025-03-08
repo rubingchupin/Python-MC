@@ -79,13 +79,12 @@ class TerrainGenerator:
             height_ratio = (total_layers - 2) / self.max_layers
             return 'snow' if height_ratio > 0.8 else 'stone' if height_ratio > 0.6 else 'grass'
         return 'dirt'
-
     def _create_block(self, parent: Entity, position: tuple, material: str) -> None:
         try:
             # 关键修改：分离获取纹理和颜色
             tex = self.texture_mgr.textures.get(material)
             col = self.texture_mgr.color_map.get(material, color.white)
-            block_color = color.white if tex is not None else col
+            block_color = col if tex is None else color.white * col
             Entity(
                 parent=parent,
                 model='cube',
@@ -95,4 +94,5 @@ class TerrainGenerator:
                 collider='box'
             )
         except Exception as e:
-            logging.warning(f"方块创建失败: {position} - {str(e)}")
+            logging.error(f"方块创建失败: {position} Material:{material} Error:{str(e)}")
+            return  # 防止单个方块导致整个地形崩溃

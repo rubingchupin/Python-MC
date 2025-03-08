@@ -19,7 +19,8 @@ class TextureManager:
         for name in self.color_map.keys():
             try:
                 tex_path = PathSystem.get_asset_path('textures', f'{name}.png')
-                if os.path.exists(tex_path):
+                # 修正为绝对路径检查
+                if tex_path and os.path.exists(tex_path):
                     self.textures[name] = load_texture(tex_path)
                     logging.info(f"成功加载: {name}.png")
                 else:
