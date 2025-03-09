@@ -51,9 +51,15 @@ except ValueError:
     MAP_SIZE = 64
 
 if __name__ == '__main__':
-    app = Ursina(development_mode=False)  # 必须首先初始化Ursina应用
-    window.title = f"分层地形生成 - {MAP_SIZE}x{MAP_SIZE}"
-    window.size = (1600, 900)
+    app = Ursina(
+        development_mode = False,
+        title = '我的世界',
+        icon = './assets/icon/favicon.ico',
+        size = (1600, 900),
+        position= (100, 100),
+        vsync= True,
+    )  # 必须首先初始化Ursina应用
+
     
     # 窗口设置（保持原样）
     window.position = (100, 100)
@@ -66,7 +72,7 @@ if __name__ == '__main__':
 
     try:
         # 初始化玩家控制器
-        player = FirstPersonController(position=(0, 50, 0))
+        player = FirstPersonController(position=(0, 60, 0))
         player.speed = 15
         player.gravity = 1.0
 

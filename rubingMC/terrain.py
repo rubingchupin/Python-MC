@@ -9,7 +9,7 @@ class TerrainGenerator:
     def __init__(self, size: int):
         self.size = size
         self.scale = size / 3
-        self.max_layers = 8
+        self.max_layers = 12
         self.base_layers = 2
         self.height_map = None
         self.texture_mgr = TextureManager()
@@ -82,7 +82,8 @@ class TerrainGenerator:
     def _create_block(self, parent: Entity, position: tuple, material: str) -> None:
         try:
             # 关键修改：分离获取纹理和颜色
-            tex = self.texture_mgr.textures.get(material)
+            #tex = self.texture_mgr.textures.get(material)
+            tex = 'white_cube'
             col = self.texture_mgr.color_map.get(material, color.white)
             block_color = col if tex is None else color.white * col
             Entity(
